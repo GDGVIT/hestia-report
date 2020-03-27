@@ -170,6 +170,7 @@ class CreateShopRecommendationUpdateView(APIView):
                 self.recommendations.filter(read_by_user=0, recommended_for=user_check["message"]["_id"]), 
                 many=True
                 )
+            Response.status_code = 200
             return Response({
                 "status": "success",
                 "message": "Fetched all unread recommendations",
