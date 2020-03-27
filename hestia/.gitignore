@@ -1,4 +1,0 @@
-.env
-env/
-venv/
-db.sqlite3
