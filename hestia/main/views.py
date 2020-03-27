@@ -58,6 +58,7 @@ class ReportingUsersView(APIView):
                 "payload": ""
             })
         else:
+            
             data = request.data
             data['user_id'] = user_check["message"]["_id"]
             report_serializer = ReportUserSerializer(data=data)

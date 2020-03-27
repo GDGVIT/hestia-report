@@ -1,0 +1,1 @@
+web: gunicorn hestia.wsgi --log-file -
