@@ -61,6 +61,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
+CORS_ORIGIN_ALLOW_ALL = True
+
 ROOT_URLCONF = 'hestia.urls'
 
 TEMPLATES = [
@@ -136,10 +139,10 @@ django_heroku.settings(locals())
 
 JWT_SECRET = config('JWT_SECRET')
 
-CORS_ORIGIN_WHITELIST = [
-    "https://covid-hestia.netlify.com"
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",
-    "http://0.0.0.0:8000",
+# CORS_ORIGIN_WHITELIST = [
+#     "https://covid-hestia.netlify.com"
+#     "http://localhost:8000",
+#     "http://127.0.0.1:8000",
+#     "http://0.0.0.0:8000",
 
-]
+# ]
