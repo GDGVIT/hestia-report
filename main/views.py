@@ -157,8 +157,18 @@ class CreateShopRecommendationView(APIView):
             if recommendation_serializer.is_valid():
 
                 uncreated_recommendation = CreateShopRecommendation.objects.filter(
-                    
+                    user_id=user_check["message"]["_id"],
+                    recommended_for=request.data.get('recommended_for'),
+                    item=request.data.get('item')
                 )
+
+                if uncreated_recommendation:
+                    Response.status_code = 409
+                    return Response({
+                        "status": "error",
+                        "message": "Already recommended this item to the receiver!",
+                        "payload" : ""
+                    })
                 recommendation_serializer.save()
                 print("Recommendation successfully added")
                 Response.status_code = 201
