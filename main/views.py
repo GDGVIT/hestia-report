@@ -58,12 +58,38 @@ class ReportingUsersView(APIView):
                 "payload": ""
             })
         else:
-            
+
             data = request.data
-            data['user_id'] = user_check["message"]["_id"]
+            #data['user_id'] = user_check["message"]["_id"]
+            data['reported_by'] = user_check["message"]["_id"]
             report_serializer = ReportUserSerializer(data=data)
             
             if report_serializer.is_valid():
+                
+                reported_by=user_check["message"]["_id"]
+                user_id=request.data.get('user_id')
+
+                check_previous_report = ReportUser.objects.filter(
+                user_id=user_id, 
+                reported_by=reported_by
+                )
+
+                if check_previous_report:
+                    Response.status_code = 409
+                    return Response({
+                        "status": "error",
+                        "message": "Already reported once",
+                        "payload": ""
+                        })
+                
+                if user_id == user_check["message"]["_id"]:
+                    Response.status_code = 409
+                    return Response({
+                        "status": "error",
+                        "message": "User cannot report self",
+                        "payload": ""
+                        })
+                
                 report_serializer.save()
                 print("User with id {} successfully reported".format(user_check["message"]["_id"]))
                 Response.status_code = 201
