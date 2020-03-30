@@ -14,6 +14,7 @@ class CreateShopRecommendation(models.Model):
     user_id = models.CharField(max_length=255)
     recommended_for = models.CharField(max_length=255)
     name_of_shop = models.CharField(max_length=100)
+    item = models.CharField(max_length=30)
     phone_number = models.CharField(max_length=15, blank=True)
     landmark = models.CharField(max_length=20)
     extra_instruction = models.TextField(blank=True)

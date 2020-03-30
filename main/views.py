@@ -155,6 +155,10 @@ class CreateShopRecommendationView(APIView):
             recommendation_serializer = CreateShopRecommendationSerializer(data=data)
             
             if recommendation_serializer.is_valid():
+
+                uncreated_recommendation = CreateShopRecommendation.objects.filter(
+                    
+                )
                 recommendation_serializer.save()
                 print("Recommendation successfully added")
                 Response.status_code = 201
@@ -193,13 +197,13 @@ class CreateShopRecommendationUpdateView(APIView):
         else:
 
             serializer = CreateShopRecommendationSerializer(
-                self.recommendations.filter(read_by_user=0, recommended_for=user_check["message"]["_id"]), 
+                self.recommendations.filter(recommended_for=user_check["message"]["_id"]), 
                 many=True
                 )
             Response.status_code = 200
             return Response({
                 "status": "success",
-                "message": "Fetched all unread recommendations",
+                "message": "Fetched all recommendations",
                 "payload": serializer.data
             })
 
