@@ -31,7 +31,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = ['0.0.0.0', 'akina.ayushpriya.tech']
+ALLOWED_HOSTS = ['0.0.0.0','hestia-report.herokuapp.com', 'akina.ayushpriya.tech']
 
 
 
