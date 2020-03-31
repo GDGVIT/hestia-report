@@ -125,7 +125,7 @@ class CreateShopRecommendationView(APIView):
             })
         else:
 
-            shop_recommendation = CreateShopRecommendation.objects.filter(user_id=user_check["message"]["_id"])
+            shop_recommendation = CreateShopRecommendation.objects.filter(recommended_for=user_check["message"]["_id"])
             serializer = CreateShopRecommendationSerializer(shop_recommendation, many=True)
             return Response({
                 "status": "success",
@@ -210,6 +210,8 @@ class CreateShopRecommendationUpdateView(APIView):
                 self.recommendations.filter(recommended_for=user_check["message"]["_id"]), 
                 many=True
                 )
+
+            print(user_check["message"]["_id"])
             Response.status_code = 200
             return Response({
                 "status": "success",
