@@ -150,6 +150,7 @@ class CreateShopRecommendationView(APIView):
             })
 
         else:
+            print(user_check["message"]["_id"])
             data = request.data
             data['user_id'] = user_check["message"]["_id"]
             recommendation_serializer = CreateShopRecommendationSerializer(data=data)
@@ -205,7 +206,7 @@ class CreateShopRecommendationUpdateView(APIView):
             })
 
         else:
-
+            print(self.recommendations.filter(recommended_for=user_check["message"]["_id"]))
             serializer = CreateShopRecommendationSerializer(
                 self.recommendations.filter(recommended_for=user_check["message"]["_id"]), 
                 many=True
