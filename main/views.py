@@ -258,3 +258,34 @@ class CreateShopRecommendationUpdateView(APIView):
                 "message": "Updated the recommendation status",
                 "payload": serializer.data
             })
+
+
+
+class ReportUserCheckView(APIView):
+    all_reports = ReportUser.objects.all()
+    def get(self, request):
+        first_user = request.query_params.get('first_user')
+        second_user = request.query_params.get('second_user')
+
+        if not(first_user and second_user):
+            Response.status_code = 400
+            return Response({
+                "message": "Need user ids as first_user and second_user as get params"
+            })
+        first_reports_second = self.all_reports.filter(user_id=first_user, reported_by=second_user)
+        second_reports_first = self.all_reports.filter(user_id=second_user, reported_by=first_user)
+
+        if first_reports_second:
+            user_1 = first_user
+            user_2 = second_user
+        elif second_reports_first:
+            user_1 = second_user
+            user_2 = first_user
+        else:
+            return Response({
+                "message": "None are blocked"
+            })
+        
+        return Response({
+            "message": "{} blocked {}".format(user_1, user_2)
+        })
