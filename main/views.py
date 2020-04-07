@@ -282,10 +282,12 @@ class ReportUserCheckView(APIView):
             user_1 = second_user
             user_2 = first_user
         else:
+            Response.status_code = 400
             return Response({
                 "message": "None are blocked"
             })
         
+        Response.status_code = 200
         return Response({
             "message": "{} blocked {}".format(user_1, user_2)
         })
