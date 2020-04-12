@@ -16,6 +16,8 @@ from .serializers import (
     CreateShopRecommendationSerializer
 )
 
+import requests
+
 class ReportingUsersView(APIView):
 
     def get(self, request):
@@ -171,6 +173,25 @@ class CreateShopRecommendationView(APIView):
                         "payload" : ""
                     })
                 recommendation_serializer.save()
+
+                data = {
+                "message_body":"body",
+                "message_title":"You have a new shop recommendation",
+                "to_all":"False",
+                "user_ids":[request.data.get('recommended_for')],
+                "data": {
+                    "url":"https://akina.dscvit.com/suggestashop",
+                    "click_action":"FLUTTER_NOTIFICATION_CLICK",
+                    "sound":"default",
+                    "status":"done",
+                    "screen":"Send shop recommendation"
+                }
+                }
+
+                response = requests.post('https://hestia-requests.herokuapp.com/api/notification/send_notification/', data=data)
+                print("Response for notification sending",response.status_code)
+                print(response.text)
+
                 print("Recommendation successfully added")
                 Response.status_code = 201
                 return Response({
