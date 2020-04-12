@@ -198,7 +198,7 @@ class CreateShopRecommendationView(APIView):
                 data = {
                     "message_body":"You have a new recommendation",
                     "message_title":"New Recommendation",
-                    "to_all":False,
+                    "to_all":0,
                     "user_ids":["126"],
                     "data": {
                         "url":"http://akina.dscvit.com/suggestashop",
