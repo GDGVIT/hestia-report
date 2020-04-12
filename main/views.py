@@ -175,10 +175,10 @@ class CreateShopRecommendationView(APIView):
                 recommendation_serializer.save()
 
                 data = {
-                "message_body":"body",
+                "message_body":"Please check the new recommendation made for {}".format(request.data.get('item')),
                 "message_title":"You have a new shop recommendation",
                 "to_all":"False",
-                "user_ids":[request.data.get('recommended_for')],
+                "user_ids":request.data.get('recommended_for'),
                 "data": {
                     "url":"https://akina.dscvit.com/suggestashop",
                     "click_action":"FLUTTER_NOTIFICATION_CLICK",
