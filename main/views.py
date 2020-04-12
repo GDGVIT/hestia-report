@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+
 from .local_helper_functions import (
     authorization, 
     getting_user
@@ -16,7 +17,7 @@ from .serializers import (
     CreateShopRecommendationSerializer
 )
 
-import requests
+import requests, json
 
 class ReportingUsersView(APIView):
 
@@ -174,28 +175,50 @@ class CreateShopRecommendationView(APIView):
                     })
                 recommendation_serializer.save()
 
+                # fcm_data = {
+                # "message_body":"Please check the new recommendation made for {}".format(request.data.get('item')),
+                # "message_title":"You have a new shop recommendation",
+                # "to_all":False,
+                # "user_ids":[request.data.get('recommended_for')],
+                # "data": {
+                #     "url":"https://akina.dscvit.com/suggestashop",
+                #     "click_action":"FLUTTER_NOTIFICATION_CLICK",
+                #     "sound":"default",
+                #     "status":"done",
+                #     "screen":"Send shop recommendation"
+                # }
+                # }
+                # print(fcm_data)
+
+                # headers = {'Content-type': 'application/json'}
+                # response = requests.post('https://hestia-requests.herokuapp.com/api/notification/send_notification/', data=json.dumps(fcm_data), headers=headers)
+                # print("Response for notification sending",response.status_code)
+                # print(response.text)
+
                 data = {
-                "message_body":"Please check the new recommendation made for {}".format(request.data.get('item')),
-                "message_title":"You have a new shop recommendation",
-                "to_all":"False",
-                "user_ids":request.data.get('recommended_for'),
-                "data": {
-                    "url":"https://akina.dscvit.com/suggestashop",
-                    "click_action":"FLUTTER_NOTIFICATION_CLICK",
-                    "sound":"default",
-                    "status":"done",
-                    "screen":"Send shop recommendation"
-                }
+                    "message_body":"You have a new recommendation",
+                    "message_title":"New Recommendation",
+                    "to_all":False,
+                    "user_ids":["126"],
+                    "data": {
+                        "url":"http://akina.dscvit.com/suggestashop",
+                        "click_action":"FLUTTER_NOTIFICATION_CLICK",
+                        "sound":"default",
+                        "status":"done",
+                        "screen":"Send shop recommendation"
+                    }
                 }
 
-                response = requests.post('https://hestia-requests.herokuapp.com/api/notification/send_notification/', data=data)
-                print("Response for notification sending",response.status_code)
+                datajson = json.dumps(data)
+                headers = {'content-type': 'application/json'}
+
+                response = requests.post("https://hestia-requests.herokuapp.com/api/notification/send_notification/", data=datajson, headers=headers)
                 print(response.text)
+                print(response.status_code)
                 
                 print("Recommendation successfully added")
                 
                 if str(response.status_code) == '400':
-                    print(response.text)
                     Response.status_code = 200
                     return Response({
                         "status": "success",
