@@ -199,7 +199,7 @@ class CreateShopRecommendationView(APIView):
                     "message_body":"You have a new recommendation",
                     "message_title":"New Recommendation",
                     "to_all":0,
-                    "user_ids":["126"],
+                    "user_ids":[request.data.get('recommended_for')],
                     "data": {
                         "url":"http://akina.dscvit.com/suggestashop",
                         "click_action":"FLUTTER_NOTIFICATION_CLICK",
