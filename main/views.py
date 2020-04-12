@@ -191,14 +191,24 @@ class CreateShopRecommendationView(APIView):
                 response = requests.post('https://hestia-requests.herokuapp.com/api/notification/send_notification/', data=data)
                 print("Response for notification sending",response.status_code)
                 print(response.text)
-
+                
                 print("Recommendation successfully added")
-                Response.status_code = 201
-                return Response({
-                    "status": "success",
-                    "message": "Recommendation successfully added",
-                    "payload" : recommendation_serializer.data
-                })
+                
+                if str(response.status_code) == '400':
+                    print(response.text)
+                    Response.status_code = 200
+                    return Response({
+                        "status": "success",
+                        "message": "Recommendation successfully added,but unable to send notification",
+                        "payload" : recommendation_serializer.data
+                    })
+                else:
+                    Response.status_code = 201
+                    return Response({
+                        "status": "success",
+                        "message": "Recommendation successfully added",
+                        "payload" : recommendation_serializer.data
+                    })
             else:
                 Response.status_code = 400
                 return Response({
