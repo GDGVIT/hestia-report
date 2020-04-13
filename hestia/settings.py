@@ -138,6 +138,7 @@ django_heroku.settings(locals())
 
 
 JWT_SECRET = config('JWT_SECRET')
+NOTIFICATION_TOKEN = config('NOTIFICATION_TOKEN')
 
 # CORS_ORIGIN_WHITELIST = [
 #     "https://covid-hestia.netlify.com"

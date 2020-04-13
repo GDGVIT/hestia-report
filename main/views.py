@@ -18,6 +18,8 @@ from .serializers import (
 )
 
 import requests, json
+from django.conf import settings
+
 
 class ReportingUsersView(APIView):
 
@@ -200,6 +202,7 @@ class CreateShopRecommendationView(APIView):
                     "message_title":"New Recommendation",
                     "to_all":0,
                     "user_ids":[request.data.get('recommended_for')],
+                    "token": settings.NOTIFICATION_TOKEN,
                     "data": {
                         "url":"http://akina.dscvit.com/suggestashop",
                         "click_action":"FLUTTER_NOTIFICATION_CLICK",
