@@ -1,1 +1,1 @@
-web:gunicorn hestia.wsgi
+web: gunicorn hestia.wsgi --log-file -
