@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-
+ from django.db import connection 
 
 from .local_helper_functions import (
     authorization, 
@@ -41,6 +41,7 @@ class ReportingUsersView(APIView):
         else:
             reports = ReportUser.objects.filter(user_id=user_check['message']['_id'])
             serializer = ReportUserSerializer(reports, many=True)
+            connection.close()
             return Response({
                 "status": "success",
                 "message": "Successfully retrieved user reports",
@@ -97,6 +98,7 @@ class ReportingUsersView(APIView):
                 
                 report_serializer.save()
                 print("User with id {} successfully reported".format(user_check["message"]["_id"]))
+                connection.close()
                 Response.status_code = 201
                 return Response({
                     "status": "success",
@@ -104,6 +106,7 @@ class ReportingUsersView(APIView):
                     "payload" : report_serializer.data
                 })
             else:
+                connection.close()
                 Response.status_code = 400
                 return Response({
                     "status": "error",
@@ -122,6 +125,7 @@ class CreateShopRecommendationView(APIView):
 
         user_check = getting_user(request)
         if user_check['status'] == 'error':
+            connection.close()
             Response.status_code = 412
             return Response({
                 "status": "error",
@@ -132,6 +136,8 @@ class CreateShopRecommendationView(APIView):
 
             shop_recommendation = CreateShopRecommendation.objects.filter(recommended_for=user_check["message"]["_id"])
             serializer = CreateShopRecommendationSerializer(shop_recommendation, many=True)
+            connection.close()
+            Response.status_code = 200
             return Response({
                 "status": "success",
                 "message": "Successfully retrieved shop recommendations",
@@ -147,6 +153,7 @@ class CreateShopRecommendationView(APIView):
         
         user_check = getting_user(request)
         if user_check['status'] == 'error':
+            connection.close()
             Response.status_code = 412
             return Response({
                 "status": "error",
@@ -169,6 +176,7 @@ class CreateShopRecommendationView(APIView):
                 )
 
                 if uncreated_recommendation:
+                    connection.close()
                     Response.status_code = 409
                     return Response({
                         "status": "error",
@@ -222,6 +230,7 @@ class CreateShopRecommendationView(APIView):
                 print("Recommendation successfully added")
                 
                 if str(response.status_code) == '400':
+                    connection.close()
                     Response.status_code = 200
                     return Response({
                         "status": "success",
@@ -229,6 +238,7 @@ class CreateShopRecommendationView(APIView):
                         "payload" : recommendation_serializer.data
                     })
                 else:
+                    connection.close()
                     Response.status_code = 201
                     return Response({
                         "status": "success",
@@ -236,6 +246,7 @@ class CreateShopRecommendationView(APIView):
                         "payload" : recommendation_serializer.data
                     })
             else:
+                connection.close()
                 Response.status_code = 400
                 return Response({
                     "status": "error",
@@ -255,6 +266,7 @@ class CreateShopRecommendationUpdateView(APIView):
         
         user_check = getting_user(request)
         if user_check['status'] == 'error':
+            connection.close()
             Response.status_code = 412
             return Response({
                 "status": "error",
@@ -270,6 +282,7 @@ class CreateShopRecommendationUpdateView(APIView):
                 )
 
             print(user_check["message"]["_id"])
+            connection.close()
             Response.status_code = 200
             return Response({
                 "status": "success",
@@ -286,6 +299,7 @@ class CreateShopRecommendationUpdateView(APIView):
         
         user_check = getting_user(request)
         if user_check['status'] == 'error':
+            connection.close()
             Response.status_code = 412
             return Response({
                 "status": "error",
@@ -296,6 +310,7 @@ class CreateShopRecommendationUpdateView(APIView):
         else:
                 
             if 'report_ids' not in request.data:
+                connection.close()
                 Response.status_code = 400
                 return Response({
                     "status": "Error",
@@ -308,7 +323,7 @@ class CreateShopRecommendationUpdateView(APIView):
                 )
             serializer = CreateShopRecommendationSerializer(objects, many=True)
             objects.update(read_by_user=1)
-            
+            connection.close()
             Response.status_code = 202
             return Response({
                 "status": "success",
@@ -325,6 +340,7 @@ class ReportUserCheckView(APIView):
         second_user = request.query_params.get('second_user')
 
         if not(first_user and second_user):
+            connection.close()
             Response.status_code = 400
             return Response({
                 "message": "Need user ids as first_user and second_user as get params"
@@ -339,11 +355,13 @@ class ReportUserCheckView(APIView):
             user_1 = second_user
             user_2 = first_user
         else:
+            connection.close()
             Response.status_code = 400
             return Response({
                 "message": "None are blocked"
             })
         
+        connection.close()
         Response.status_code = 200
         return Response({
             "message": "{} blocked {}".format(user_1, user_2)
