@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
- from django.db import connection 
+from django.db import connection 
 
 from .local_helper_functions import (
     authorization, 
