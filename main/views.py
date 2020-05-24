@@ -223,7 +223,7 @@ class CreateShopRecommendationView(APIView):
                 datajson = json.dumps(data)
                 headers = {'content-type': 'application/json'}
 
-                response = requests.post("https://hestia-requests.herokuapp.com/api/notification/send_notification/", data=datajson, headers=headers)
+                response = requests.post("https://akina.ayushpriya.tech/api/notification/send_notification/", data=datajson, headers=headers)
                 print(response.text)
                 print(response.status_code)
                 
